@@ -3,50 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Health Tech - Daily Tracker</title>
+    <title>RikHealth-Pro | Data Logger</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f7f6; color: #333; margin: 0; padding: 20px; }
-        .container { max-width: 500px; background: white; margin: 30px auto; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        h2 { color: #2c3e50; text-align: center; margin-top: 0; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; color: #555; }
-        input[type="number"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: #2ecc71; border: none; color: white; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; transition: background 0.2s; }
-        button:hover { background: #27ae60; }
-        .log-box { margin-top: 25px; padding-top: 15px; border-top: 2px solid #eee; }
-        .log-item { background: #f9f9f9; padding: 10px; border-left: 4px solid #2ecc71; margin-bottom: 8px; font-size: 14px; border-radius: 0 4px 4px 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0b132b; color: #ffffff; margin: 0; padding: 20px; text-align: center; }
+        .container { max-width: 500px; background: #1c2541; margin: 30px auto; padding: 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border: 1px solid #2a3a5c; }
+        h2 { color: #5dade2; margin-top: 0; }
+        nav { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #3a506b; }
+        .nav-btn { display: inline-block; padding: 10px 18px; text-decoration: none; border-radius: 4px; font-size: 14px; font-weight: bold; margin: 0 5px; color: white; }
+        .btn-analytics { background: #3498db; }
+        .btn-reminder { background: #e67e22; }
+        
+        .form-group { margin-bottom: 20px; text-align: left; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; color: #a6acaf; font-size: 14px; }
+        input[type="number"] { width: 100%; padding: 12px; background: #151e3d; border: 1px solid #3a506b; border-radius: 6px; color: white; box-sizing: border-box; font-size: 16px; }
+        input[type="number"]:focus { border-color: #5dade2; outline: none; }
+        
+        button { width: 100%; padding: 14px; background: #2ecc71; border: none; color: white; font-size: 16px; font-weight: bold; border-radius: 6px; cursor: pointer; transition: background 0.2s, transform 0.1s; box-shadow: 0 4px 10px rgba(46,204,113,0.2); }
+        button:hover { background: #27ae60; transform: translateY(-1px); }
+        button:active { transform: translateY(1px); }
+        
+        .log-box { margin-top: 30px; padding-top: 20px; border-top: 1px solid #3a506b; text-align: left; }
+        .log-item { background: #151e3d; padding: 12px; border-left: 4px solid #2ecc71; margin-bottom: 10px; font-size: 14px; border-radius: 0 6px 6px 0; border: 1px solid #2a3a5c; border-left: 4px solid #2ecc71; color: #e5e8e8; }
     </style>
 </head>
 <body>
-<nav style="text-align: center; margin: 15px auto; max-width: 500px; padding: 10px 0;">
-    <a href="analytics.html" style="display: inline-block; padding: 10px 18px; background: #34495e; color: white; text-decoration: none; border-radius: 4px; font-size: 14px; font-weight: bold; margin: 0 5px; transition: background 0.2s;">View Analytics 📈</a>
-    <a href="reminder.html" style="display: inline-block; padding: 10px 18px; background: #e67e22; color: white; text-decoration: none; border-radius: 4px; font-size: 14px; font-weight: bold; margin: 0 5px; transition: background 0.2s;">Set Reminders 🔔</a>
-</nav>
 
 <div class="container">
-    <h2>Daily Health Tracker</h2>
+    <nav>
+        <a href="analytics.html" class="nav-btn btn-analytics">View Analytics 📈</a>
+        <a href="reminder.html" class="nav-btn btn-reminder">Set Reminders 🔔</a>
+    </nav>
+    
+    <h2>Daily Metric Logger</h2>
     
     <form id="trackerForm">
         <div class="form-group">
-            <label for="water">Water Intake (ml):</label>
+            <label for="water">💧 Water Intake (ml):</label>
             <input type="number" id="water" min="0" required placeholder="e.g., 2500">
         </div>
         
         <div class="form-group">
-            <label for="sleep">Sleep Duration (Hours):</label>
+            <label for="sleep">😴 Sleep Duration (Hours):</label>
             <input type="number" id="sleep" min="0" max="24" step="0.5" required placeholder="e.g., 8">
         </div>
         
         <div class="form-group">
-            <label for="exercise">Active Minutes:</label>
+            <label for="exercise">🏃 Active Minutes:</label>
             <input type="number" id="exercise" min="0" required placeholder="e.g., 45">
         </div>
         
-        <button type="submit">Log Daily Metrics</button>
+        <button type="submit">Commit Daily Metrics</button>
     </form>
 
     <div class="log-box">
-        <h3>Recent History Logs</h3>
+        <h3 style="color: #5dade2; margin-top: 0;">Recent Database History</h3>
         <div id="logContainer"></div>
     </div>
 </div>
@@ -55,35 +65,27 @@
     const trackerForm = document.getElementById('trackerForm');
     const logContainer = document.getElementById('logContainer');
 
-    // Function to load and display saved data from localStorage
     function displayLogs() {
         logContainer.innerHTML = '';
-        // Get existing data array or create an empty one if it doesn't exist
         const healthData = JSON.parse(localStorage.getItem('healthData')) || [];
         
-        // Show the logs in reverse order (newest first)
         healthData.reverse().forEach(entry => {
             const div = document.createElement('div');
             div.className = 'log-item';
             div.innerHTML = `<strong>Date:</strong> ${entry.date}<br>
-                             💧 Water: ${entry.water}ml | 
-                             😴 Sleep: ${entry.sleep} hrs | 
-                             🏃 Exercise: ${entry.exercise} mins`;
+                             💧 ${entry.water}ml | 😴 ${entry.sleep} hrs | 🏃 ${entry.exercise} mins`;
             logContainer.appendChild(div);
         });
     }
 
-    // Handle form submission
     trackerForm.addEventListener('submit', function(e) {
-        e.preventDefault(); // Stop page from refreshing on submit
+        e.preventDefault();
 
-        // Capture input values
         const waterVal = document.getElementById('water').value;
         const sleepVal = document.getElementById('sleep').value;
         const exerciseVal = document.getElementById('exercise').value;
         const currentDate = new Date().toLocaleDateString();
 
-        // Create a data object for today
         const newEntry = {
             date: currentDate,
             water: waterVal,
@@ -91,21 +93,14 @@
             exercise: exerciseVal
         };
 
-        // Fetch existing logs array from localStorage
         const currentData = JSON.parse(localStorage.getItem('healthData')) || [];
-        
-        // Push the new object into the local array
         currentData.push(newEntry);
-        
-        // Save the updated array back to localStorage as a string
         localStorage.setItem('healthData', JSON.stringify(currentData));
 
-        // Reset the form fields and refresh the display list
         trackerForm.reset();
         displayLogs();
     });
 
-    // Run the display function automatically when the page opens
     displayLogs();
 </script>
 

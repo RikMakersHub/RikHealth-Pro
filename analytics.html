@@ -5,24 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RikHealth-Pro | Local Analytics</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0b132b; color: #ffffff; margin: 0; padding: 20px; text-align: center; }
-        .container { max-width: 700px; background: #1c2541; margin: 30px auto; padding: 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-        h2 { color: #5dade2; margin-top: 0; }
-        nav { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #3a506b; }
-        .nav-btn { display: inline-block; padding: 10px 18px; text-decoration: none; border-radius: 4px; font-size: 14px; font-weight: bold; margin: 0 5px; color: white; }
-        .btn-tracker { background: #2ecc71; }
-        .btn-reminder { background: #e67e22; }
+               body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #ffffff; color: #1a252f; margin: 0; padding: 0 0 20px 0; text-align: center; }
+        .container { max-width: 700px; background: #ffffff; margin: 30px auto; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border: 1px solid #eef2f5; }
+        h2 { color: #1a252f; margin-top: 0; }
         
         /* Local Bar Graph Styles */
-        .dashboard-box { background: #151e3d; padding: 20px; border-radius: 8px; margin-top: 20px; text-align: left; border: 1px solid #2a3a5c; }
+        .dashboard-box { background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 20px; text-align: left; border: 1px solid #eef2f5; }
         .data-row { margin-bottom: 20px; }
-        .row-header { display: flex; justify-content: space-between; font-weight: bold; font-size: 14px; margin-bottom: 5px; }
-        .bar-container { background: #2c3e50; width: 100%; height: 24px; border-radius: 12px; overflow: hidden; position: relative; }
+        .row-header { display: flex; justify-content: space-between; font-weight: bold; font-size: 14px; margin-bottom: 5px; color: #2c3e50; }
+        .bar-container { background: #eef2f8; width: 100%; height: 24px; border-radius: 12px; overflow: hidden; position: relative; }
         .bar-fill { height: 100%; width: 0%; transition: width 0.5s ease-out; border-radius: 12px; }
         .water-bar { background: #3498db; }
         .sleep-bar { background: #9b59b6; }
         .exercise-bar { background: #e67e22; }
-        .no-data { color: #a6acaf; padding: 40px 0; font-style: italic; }
+        .no-data { color: #7f8c8d; padding: 40px 0; font-style: italic; }
+
     </style>
 </head>
 <body>

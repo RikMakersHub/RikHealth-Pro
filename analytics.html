@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RikHealth-Pro | Analytics Dashboard</title>
+    <title>RikHealth-Pro | Local Analytics</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0b132b; color: #ffffff; margin: 0; padding: 20px; text-align: center; }
         .container { max-width: 700px; background: #1c2541; margin: 30px auto; padding: 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
@@ -12,8 +12,16 @@
         .nav-btn { display: inline-block; padding: 10px 18px; text-decoration: none; border-radius: 4px; font-size: 14px; font-weight: bold; margin: 0 5px; color: white; }
         .btn-tracker { background: #2ecc71; }
         .btn-reminder { background: #e67e22; }
-        .chart-box { background: white; padding: 15px; border-radius: 6px; margin-top: 20px; }
-        iframe { width: 100%; height: 320px; border: none; }
+        
+        /* Local Bar Graph Styles */
+        .dashboard-box { background: #151e3d; padding: 20px; border-radius: 8px; margin-top: 20px; text-align: left; border: 1px solid #2a3a5c; }
+        .data-row { margin-bottom: 20px; }
+        .row-header { display: flex; justify-content: space-between; font-weight: bold; font-size: 14px; margin-bottom: 5px; }
+        .bar-container { background: #2c3e50; width: 100%; height: 24px; border-radius: 12px; overflow: hidden; position: relative; }
+        .bar-fill { height: 100%; width: 0%; transition: width 0.5s ease-out; border-radius: 12px; }
+        .water-bar { background: #3498db; }
+        .sleep-bar { background: #9b59b6; }
+        .exercise-bar { background: #e67e22; }
         .no-data { color: #a6acaf; padding: 40px 0; font-style: italic; }
     </style>
 </head>
@@ -31,9 +39,39 @@
         No tracking data found. Go log some metrics first!
     </div>
 
-    <!-- The Cloud Rendering Frame Container -->
-    <div id="chartWrapper" class="chart-box">
-        <iframe id="cloudChartFrame"></iframe>
+    <!-- Container for dynamic native metric progress bars -->
+    <div id="chartWrapper" class="dashboard-box">
+        <h3 style="margin-top:0; color:#5dade2; text-align:center;" id="dashboardDate">Latest Log Analysis</h3>
+        
+        <div class="data-row">
+            <div class="row-header">
+                <span>💧 Water Intake (Target: 3000ml)</span>
+                <span id="waterTxt">0ml / 3000ml</span>
+            </div>
+            <div class="bar-container">
+                <div id="waterBar" class="bar-fill water-bar"></div>
+            </div>
+        </div>
+
+        <div class="data-row">
+            <div class="row-header">
+                <span>😴 Sleep Duration (Target: 8 hrs)</span>
+                <span id="sleepTxt">0 hrs / 8 hrs</span>
+            </div>
+            <div class="bar-container">
+                <div id="sleepBar" class="bar-fill sleep-bar"></div>
+            </div>
+        </div>
+
+        <div class="data-row">
+            <div class="row-header">
+                <span>🏃 Active Exercise (Target: 60 mins)</span>
+                <span id="exerciseTxt">0 mins / 60 mins</span>
+            </div>
+            <div class="bar-container">
+                <div id="exerciseBar" class="bar-fill exercise-bar"></div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -44,29 +82,30 @@
         document.getElementById('chartWrapper').style.display = 'none';
         document.getElementById('noDataMessage').style.display = 'block';
     } else {
-        // Parse database arrays from local cache memory
-        const labels = storedData.map(entry => entry.date);
-        const waterData = storedData.map(entry => entry.water);
-        const sleepData = storedData.map(entry => entry.sleep);
-
-        // Define a structured chart configuration packet
-        const chartConfig = {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [
-                    { label: 'Water (ml)', data: waterData, backgroundColor: '#3498db' },
-                    { label: 'Sleep (hrs)', data: sleepData, backgroundColor: '#9b59b6' }
-                ]
-            }
-        };
-
-        // Convert data packet to an URL encoded string component
-        const encodedConfig = encodeURIComponent(JSON.stringify(chartConfig));
+        // Grab the most recent entry logged in your local data array
+        const latestEntry = storedData[storedData.length - 1];
         
-        // Feed the string to the iFrame source path for real-time generation
-        const cloudChartUrl = `https://quickchart.io{encodedConfig}`;
-        document.getElementById('cloudChartFrame').src = cloudChartUrl;
+        document.getElementById('dashboardDate').textContent = `Log Analysis for ${latestEntry.date}`;
+
+        // Convert values to numbers safely
+        const water = parseFloat(latestEntry.water) || 0;
+        const sleep = parseFloat(latestEntry.sleep) || 0;
+        const exercise = parseFloat(latestEntry.exercise) || 0;
+
+        // Calculate dynamic mathematical percentages relative to target baselines
+        const waterPct = Math.min((water / 3000) * 100, 100);
+        const sleepPct = Math.min((sleep / 8) * 100, 100);
+        const exercisePct = Math.min((exercise / 60) * 100, 100);
+
+        // Render string metrics into text panels
+        document.getElementById('waterTxt').textContent = `${water}ml / 3000ml (${Math.round(waterPct)}%)`;
+        document.getElementById('sleepTxt').textContent = `${sleep} hrs / 8 hrs (${Math.round(sleepPct)}%)`;
+        document.getElementById('exerciseTxt').textContent = `${exercise} mins / 60 mins (${Math.round(exercisePct)}%)`;
+
+        // Inject computed sizing straight into standard CSS style widths
+        document.getElementById('waterBar').style.width = `${waterPct}%`;
+        document.getElementById('sleepBar').style.width = `${sleepPct}%`;
+        document.getElementById('exerciseBar').style.width = `${exercisePct}%`;
     }
 </script>
 

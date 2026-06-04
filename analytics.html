@@ -4,19 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RikHealth-Pro | Analytics Dashboard</title>
-    <!-- Correct, high-reliability production CDN script tag -->
-    <script src="https://jsdelivr.net"></script>
-
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; color: #333; margin: 0; padding: 20px; }
-        .container { max-width: 700px; background: white; margin: 30px auto; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        h2 { color: #2c3e50; text-align: center; margin-top: 0; }
-        nav { text-align: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0b132b; color: #ffffff; margin: 0; padding: 20px; text-align: center; }
+        .container { max-width: 700px; background: #1c2541; margin: 30px auto; padding: 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        h2 { color: #5dade2; margin-top: 0; }
+        nav { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #3a506b; }
         .nav-btn { display: inline-block; padding: 10px 18px; text-decoration: none; border-radius: 4px; font-size: 14px; font-weight: bold; margin: 0 5px; color: white; }
         .btn-tracker { background: #2ecc71; }
         .btn-reminder { background: #e67e22; }
-        .chart-container { position: relative; margin-top: 20px; height: 350px; width: 100%; }
-        .no-data { text-align: center; color: #7f8c8d; padding: 40px 0; font-style: italic; }
+        .chart-box { background: white; padding: 15px; border-radius: 6px; margin-top: 20px; }
+        iframe { width: 100%; height: 320px; border: none; }
+        .no-data { color: #a6acaf; padding: 40px 0; font-style: italic; }
     </style>
 </head>
 <body>
@@ -27,14 +25,15 @@
         <a href="reminder.html" class="nav-btn btn-reminder">Set Reminders 🔔</a>
     </nav>
     
-    <h2>Health Analytics Over Time</h2>
+    <h2>Health Analytics Dashboard</h2>
     
     <div id="noDataMessage" class="no-data" style="display: none;">
         No tracking data found. Go log some metrics first!
     </div>
 
-    <div class="chart-container" id="chartWrapper">
-        <canvas id="analyticsChart"></canvas>
+    <!-- The Cloud Rendering Frame Container -->
+    <div id="chartWrapper" class="chart-box">
+        <iframe id="cloudChartFrame"></iframe>
     </div>
 </div>
 
@@ -45,67 +44,29 @@
         document.getElementById('chartWrapper').style.display = 'none';
         document.getElementById('noDataMessage').style.display = 'block';
     } else {
+        // Parse database arrays from local cache memory
         const labels = storedData.map(entry => entry.date);
         const waterData = storedData.map(entry => entry.water);
         const sleepData = storedData.map(entry => entry.sleep);
-        const exerciseData = storedData.map(entry => entry.exercise);
 
-        const ctx = document.getElementById('analyticsChart').getContext('2d');
-        
-        new Chart(ctx, {
-            type: 'line',
+        // Define a structured chart configuration packet
+        const chartConfig = {
+            type: 'bar',
             data: {
                 labels: labels,
                 datasets: [
-                    {
-                        label: 'Water Intake (ml)',
-                        data: waterData,
-                        borderColor: '#3498db',
-                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
-                        borderWidth: 2,
-                        tension: 0.3,
-                        yAxisID: 'y'
-                    },
-                    {
-                        label: 'Sleep (Hours)',
-                        data: sleepData,
-                        borderColor: '#9b59b6',
-                        backgroundColor: 'rgba(155, 89, 182, 0.1)',
-                        borderWidth: 2,
-                        tension: 0.3,
-                        yAxisID: 'y1'
-                    },
-                    {
-                        label: 'Exercise (Mins)',
-                        data: exerciseData,
-                        borderColor: '#e67e22',
-                        backgroundColor: 'rgba(230, 126, 34, 0.1)',
-                        borderWidth: 2,
-                        tension: 0.3,
-                        yAxisID: 'y1'
-                    }
+                    { label: 'Water (ml)', data: waterData, backgroundColor: '#3498db' },
+                    { label: 'Sleep (hrs)', data: sleepData, backgroundColor: '#9b59b6' }
                 ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        type: 'linear',
-                        display: true,
-                        position: 'left',
-                        title: { display: true, text: 'Volume (ml)' }
-                    },
-                    y1: {
-                        type: 'linear',
-                        display: true,
-                        position: 'right',
-                        grid: { drawOnChartArea: false },
-                        title: { display: true, text: 'Hours / Minutes' }
-                    }
-                }
             }
-        });
+        };
+
+        // Convert data packet to an URL encoded string component
+        const encodedConfig = encodeURIComponent(JSON.stringify(chartConfig));
+        
+        // Feed the string to the iFrame source path for real-time generation
+        const cloudChartUrl = `https://quickchart.io{encodedConfig}`;
+        document.getElementById('cloudChartFrame').src = cloudChartUrl;
     }
 </script>
 

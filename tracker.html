@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Tech - Daily Tracker</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f7f6; color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 500px; background: white; margin: 30px auto; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2 { color: #2c3e50; text-align: center; margin-top: 0; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: #555; }
+        input[type="number"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #2ecc71; border: none; color: white; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; transition: background 0.2s; }
+        button:hover { background: #27ae60; }
+        .log-box { margin-top: 25px; padding-top: 15px; border-top: 2px solid #eee; }
+        .log-item { background: #f9f9f9; padding: 10px; border-left: 4px solid #2ecc71; margin-bottom: 8px; font-size: 14px; border-radius: 0 4px 4px 0; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Daily Health Tracker</h2>
+    
+    <form id="trackerForm">
+        <div class="form-group">
+            <label for="water">Water Intake (ml):</label>
+            <input type="number" id="water" min="0" required placeholder="e.g., 2500">
+        </div>
+        
+        <div class="form-group">
+            <label for="sleep">Sleep Duration (Hours):</label>
+            <input type="number" id="sleep" min="0" max="24" step="0.5" required placeholder="e.g., 8">
+        </div>
+        
+        <div class="form-group">
+            <label for="exercise">Active Minutes:</label>
+            <input type="number" id="exercise" min="0" required placeholder="e.g., 45">
+        </div>
+        
+        <button type="submit">Log Daily Metrics</button>
+    </form>
+
+    <div class="log-box">
+        <h3>Recent History Logs</h3>
+        <div id="logContainer"></div>
+    </div>
+</div>
+
+<script>
+    const trackerForm = document.getElementById('trackerForm');
+    const logContainer = document.getElementById('logContainer');
+
+    // Function to load and display saved data from localStorage
+    function displayLogs() {
+        logContainer.innerHTML = '';
+        // Get existing data array or create an empty one if it doesn't exist
+        const healthData = JSON.parse(localStorage.getItem('healthData')) || [];
+        
+        // Show the logs in reverse order (newest first)
+        healthData.reverse().forEach(entry => {
+            const div = document.createElement('div');
+            div.className = 'log-item';
+            div.innerHTML = `<strong>Date:</strong> ${entry.date}<br>
+                             💧 Water: ${entry.water}ml | 
+                             😴 Sleep: ${entry.sleep} hrs | 
+                             🏃 Exercise: ${entry.exercise} mins`;
+            logContainer.appendChild(div);
+        });
+    }
+
+    // Handle form submission
+    trackerForm.addEventListener('submit', function(e) {
+        e.preventDefault(); // Stop page from refreshing on submit
+
+        // Capture input values
+        const waterVal = document.getElementById('water').value;
+        const sleepVal = document.getElementById('sleep').value;
+        const exerciseVal = document.getElementById('exercise').value;
+        const currentDate = new Date().toLocaleDateString();
+
+        // Create a data object for today
+        const newEntry = {
+            date: currentDate,
+            water: waterVal,
+            sleep: sleepVal,
+            exercise: exerciseVal
+        };
+
+        // Fetch existing logs array from localStorage
+        const currentData = JSON.parse(localStorage.getItem('healthData')) || [];
+        
+        // Push the new object into the local array
+        currentData.push(newEntry);
+        
+        // Save the updated array back to localStorage as a string
+        localStorage.setItem('healthData', JSON.stringify(currentData));
+
+        // Reset the form fields and refresh the display list
+        trackerForm.reset();
+        displayLogs();
+    });
+
+    // Run the display function automatically when the page opens
+    displayLogs();
+</script>
+
+</body>
+</html>

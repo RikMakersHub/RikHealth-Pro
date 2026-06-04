@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Tech - Analytics Dashboard</title>
+    <!-- Loading Chart.js via CDN for high-end data visualization -->
+    <script src="https://jsdelivr.net"></script>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f7f6; color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 700px; background: white; margin: 30px auto; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2 { color: #2c3e50; text-align: center; margin-top: 0; }
+        .nav-box { text-align: center; margin-bottom: 20px; }
+        .nav-btn { display: inline-block; padding: 8px 15px; background: #34495e; color: white; text-decoration: none; border-radius: 4px; font-size: 14px; font-weight: bold; }
+        .nav-btn:hover { background: #2c3e50; }
+        .chart-container { position: relative; margin-top: 20px; height: 350px; width: 100%; }
+        .no-data { text-align: center; color: #7f8c8d; padding: 40px 0; font-style: italic; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="nav-box">
+        <!-- Quick navigation link back to your tracker page -->
+        <a href="tracker.html" class="nav-btn">← Go to Data Tracker</a>
+    </div>
+    
+    <h2>Health Analytics Over Time</h2>
+    
+    <div id="noDataMessage" class="no-data" style="display: none;">
+        No tracking data found. Go log some metrics first!
+    </div>
+
+    <div class="chart-container" id="chartWrapper">
+        <canvas id="analyticsChart"></canvas>
+    </div>
+</div>
+
+<script>
+    // Fetch stored tracking array from local storage
+    const storedData = JSON.parse(localStorage.getItem('healthData')) || [];
+
+    if (storedData.length === 0) {
+        document.getElementById('chartWrapper').style.display = 'none';
+        document.getElementById('noDataMessage').style.display = 'block';
+    } else {
+        // Map stored object keys into flat arrays for chart data inputs
+        const labels = storedData.map(entry => entry.date);
+        const waterData = storedData.map(entry => entry.water);
+        const sleepData = storedData.map(entry => entry.sleep);
+        const exerciseData = storedData.map(entry => entry.exercise);
+
+        const ctx = document.getElementById('analyticsChart').getContext('2d');
+        
+        // Initialize the Chart.js instance
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Water Intake (ml)',
+                        data: waterData,
+                        borderColor: '#3498db',
+                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: 'Sleep (Hours)',
+                        data: sleepData,
+                        borderColor: '#9b59b6',
+                        backgroundColor: 'rgba(155, 89, 182, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        yAxisID: 'y1'
+                    },
+                    {
+                        label: 'Exercise (Mins)',
+                        data: exerciseData,
+                        borderColor: '#e67e22',
+                        backgroundColor: 'rgba(230, 126, 34, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: { display: true, text: 'Volume (ml)' }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        grid: { drawOnChartArea: false }, // Prevent grid lines overlapping
+                        title: { display: true, text: 'Hours / Minutes' }
+                    }
+                }
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

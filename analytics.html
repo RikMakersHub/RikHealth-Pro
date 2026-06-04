@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Health Tech - Analytics Dashboard</title>
-    <!-- Loading Chart.js via CDN for high-end data visualization -->
+    <title>RikHealth-Pro | Analytics Dashboard</title>
+    <!-- Correct, high-reliability production CDN script tag -->
     <script src="https://jsdelivr.net"></script>
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f7f6; color: #333; margin: 0; padding: 20px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; color: #333; margin: 0; padding: 20px; }
         .container { max-width: 700px; background: white; margin: 30px auto; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         h2 { color: #2c3e50; text-align: center; margin-top: 0; }
-        .nav-box { text-align: center; margin-bottom: 20px; }
-        .nav-btn { display: inline-block; padding: 8px 15px; background: #34495e; color: white; text-decoration: none; border-radius: 4px; font-size: 14px; font-weight: bold; }
-        .nav-btn:hover { background: #2c3e50; }
+        nav { text-align: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .nav-btn { display: inline-block; padding: 10px 18px; text-decoration: none; border-radius: 4px; font-size: 14px; font-weight: bold; margin: 0 5px; color: white; }
+        .btn-tracker { background: #2ecc71; }
+        .btn-reminder { background: #e67e22; }
         .chart-container { position: relative; margin-top: 20px; height: 350px; width: 100%; }
         .no-data { text-align: center; color: #7f8c8d; padding: 40px 0; font-style: italic; }
     </style>
@@ -20,10 +21,10 @@
 <body>
 
 <div class="container">
-    <div class="nav-box">
-        <!-- Quick navigation link back to your tracker page -->
-        <a href="tracker.html" class="nav-btn">← Go to Data Tracker</a>
-    </div>
+    <nav>
+        <a href="tracker.html" class="nav-btn btn-tracker">← Data Tracker</a>
+        <a href="reminder.html" class="nav-btn btn-reminder">Set Reminders 🔔</a>
+    </nav>
     
     <h2>Health Analytics Over Time</h2>
     
@@ -37,14 +38,12 @@
 </div>
 
 <script>
-    // Fetch stored tracking array from local storage
     const storedData = JSON.parse(localStorage.getItem('healthData')) || [];
 
     if (storedData.length === 0) {
         document.getElementById('chartWrapper').style.display = 'none';
         document.getElementById('noDataMessage').style.display = 'block';
     } else {
-        // Map stored object keys into flat arrays for chart data inputs
         const labels = storedData.map(entry => entry.date);
         const waterData = storedData.map(entry => entry.water);
         const sleepData = storedData.map(entry => entry.sleep);
@@ -52,7 +51,6 @@
 
         const ctx = document.getElementById('analyticsChart').getContext('2d');
         
-        // Initialize the Chart.js instance
         new Chart(ctx, {
             type: 'line',
             data: {
@@ -101,7 +99,7 @@
                         type: 'linear',
                         display: true,
                         position: 'right',
-                        grid: { drawOnChartArea: false }, // Prevent grid lines overlapping
+                        grid: { drawOnChartArea: false },
                         title: { display: true, text: 'Hours / Minutes' }
                     }
                 }

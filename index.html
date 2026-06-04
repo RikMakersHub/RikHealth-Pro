@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RikHealth-Pro Hub</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0b132b;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            padding: 20px;
+        }
+        .logo-box {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        h1 {
+            font-size: 2.8rem;
+            color: #5dade2;
+            margin: 0 0 20px 0;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        p {
+            font-size: 1.2rem;
+            color: #a6acaf;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+        .portal-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 60px;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px 35px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            min-width: 220px;
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+        }
+        .btn-tracker {
+            background-color: #2ecc71;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
+        }
+        .btn-tracker:hover {
+            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.6);
+        }
+        .btn-analytics {
+            background-color: #3498db;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+        }
+        .btn-analytics:hover {
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.6);
+        }
+        .btn-reminder {
+            background-color: #e67e22;
+            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.4);
+        }
+        .btn-reminder:hover {
+            box-shadow: 0 6px 20px rgba(230, 126, 34, 0.6);
+        }
+        footer {
+            font-size: 0.95rem;
+            color: #7f8c8d;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="logo-box">🩺</div>
+    <h1>RikHealth-Pro Hub</h1>
+    <p>Select your health utility portal to access core metrics tracking, diagnostic data analytics, and custom habit automation loops.</p>
+    
+    <div class="portal-container">
+        <a href="tracker.html" class="btn btn-tracker">🟢 Core Metrics Tracker</a>
+        <a href="analytics.html" class="btn btn-analytics">📈 Data Analytics Engine</a>
+        <a href="reminder.html" class="btn btn-reminder">🔔 System Reminders</a>
+    </div>
+
+    <footer>
+        © RikHealth-Pro ecosystem supported by RikMakersHub. All Rights Reserved.
+    </footer>
+</div>
+
+</body>
+</html>
